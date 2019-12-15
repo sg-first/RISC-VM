@@ -35,6 +35,16 @@ private:
             this->mov(); //执行周期
         else if(IR.op==1)
             this->lad();
+        else if(IR.op==2)
+            this->add();
+        else if(IR.op==3)
+            this->sto();
+        else if(IR.op==4)
+            this->jmp();
+        else if(IR.op==5)
+            this->jz();
+        else if(IR.op==6)
+            this->jnz();
     }
 
     //所有指令函数
@@ -70,10 +80,30 @@ private:
 
     void jmp() //以指定地址装入PC
     {
-        //0:寄存器
+        //0:存储跳转地址的寄存器
         //warn:教材上写的是直接PC<-IR，但这显然不可能
         this->AR=this->generalRegister[IR.addressCode[0]]; //应该是取寄存器里面内容放IR里，因为IR在模拟时是指令对象，所以这里放AR里
         this->PC=this->AR;
+    }
+
+    void jz() //为0跳转，将指令地址装入PC，或什么都不做
+    {
+        //0:存储跳转地址的寄存器 1:存储条件的寄存器
+        if(this->generalRegister[IR.addressCode[1]]==0)
+        {
+            this->AR=this->generalRegister[IR.addressCode[0]];
+            this->PC=this->AR;
+        }
+    }
+
+    void jnz() //非0跳转，将指令地址装入PC，或什么都不做
+    {
+        //0:存储跳转地址的寄存器 1:存储条件的寄存器
+        if(this->generalRegister[IR.addressCode[1]]!=0)
+        {
+            this->AR=this->generalRegister[IR.addressCode[0]];
+            this->PC=this->AR;
+        }
     }
 
 public:
